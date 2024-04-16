@@ -1,0 +1,33 @@
+main {
+  border: 5px solid #161f6D;
+  border-radius: 20px;
+  position: absolute;
+  top: 400px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0;
+}
+
+.sidebar {
+  width: 300px;
+  border-right: 1px solid #9E9E9E;
+}
+
+.main-content {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+}
+
+.min-600-px {
+  min-height: 600px;
+}
+
+.custom-container {
+    background-color: #FFF;
+}
+
+.frame {
+  min-height: 100vh;
+  max-height: 100vh;
+}
