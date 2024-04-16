@@ -1,0 +1,28 @@
+<header>
+  <div class="logo-container">
+    <h4>Healthcare Management</h4>
+  </div>
+  <nav class="navbar navbar-light bg-white custom-navbar mb-3 mt-3">
+    <ul class="navbar-nav">
+      <li class="nav-item" [routerLinkActive]="['link-active']">
+        <a class="nav-link text-dark" [routerLink]="['/patients']"
+          >Patients</a
+        >
+      </li>
+      <li class="nav-item" [routerLinkActive]="['link-active']">
+        <a class="nav-link text-dark" [routerLink]="['/doctors']"
+          >Doctors</a
+        >
+      </li>
+      <li
+        class="nav-item"
+        [routerLinkActive]="['link-active']"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <a class="nav-link text-dark" [routerLink]="['/']"
+          >Appointments</a
+        >
+      </li>
+    </ul>
+  </nav>
+</header>
