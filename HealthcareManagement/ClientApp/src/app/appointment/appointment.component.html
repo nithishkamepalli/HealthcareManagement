@@ -1,0 +1,192 @@
+<div class="d-flex justify-content-between align-items-center">
+  <div>
+    <h4 *ngIf="currentMode === mode.Read">Appointments</h4>
+    <h4 *ngIf="currentMode === mode.Add">Add Appointment</h4>
+    <h4 *ngIf="currentMode === mode.Update">Update Appointment</h4>
+  </div>
+  <div>
+    <button
+      *ngIf="currentMode === mode.Read"
+      (click)="changeMode(mode.Add)"
+      class="btn btn-sm btn-warning"
+    >
+      Add
+    </button>
+    <button
+      *ngIf="currentMode === mode.Highlight"
+      (click)="changeMode(mode.Read)"
+      class="btn btn-sm btn-secoundary"
+    >
+      Back
+    </button>
+  </div>
+</div>
+
+<ng-container *ngIf="currentMode === mode.Read">
+  <div class="mt-2">
+    <form [formGroup]="filterForm">
+      <div class="d-flex">
+        <div class="form-group me-2">
+          <label>Patient Name</label>
+          <input
+            type="text"
+            placeholder="Enter patient name"
+            formControlName="patientName"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group me-2">
+          <label>Doctor Name</label>
+          <input
+            type="text"
+            placeholder="Enter doctor name"
+            formControlName="doctorName"
+            class="form-control"
+          />
+        </div>
+        <div class="form-group me-4">
+          <label>Appointment Date</label>
+          <input
+            type="date"
+            formControlName="appointmentDate"
+            class="form-control"
+          />
+        </div>
+        <div class="d-flex align-items-center">
+          <button
+            type="button"
+            (click)="fetch()"
+            class="btn btn-sm btn-warning me-2"
+          >
+            Search
+          </button>
+          <button
+            type="button"
+            (click)="reset()"
+            class="btn btn-sm btn-danger me-2"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Patient Name</th>
+        <th>Doctor name</th>
+        <th>Appointment Date</th>
+        <th>Appointment Time</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="records.length">
+        <tr *ngFor="let record of records; let i = index">
+          <td [textContent]="i + 1"></td>
+          <td [textContent]="record.patientName"></td>
+          <td [textContent]="record.doctorName"></td>
+          <td [textContent]="record.appointmentDate | date : 'yyyy-MM-dd'"></td>
+          <td [textContent]="record.appointmentTime"></td>
+          <td [textContent]="record.notes"></td>
+          <td>
+            <div class="d-flex justify-content-end">
+              <a
+                (click)="changeMode(mode.Update, record)"
+                class="text-warning me-2"
+              >edit</a>
+              <a
+                (click)="onDelete(record)"
+                class="text-danger me-2"
+              >delete</a>
+              <a
+                [routerLink]="['/prescription', record.appointmentId]"
+                class="text-primary me-2"
+              >prescription</a>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+      <ng-container *ngIf="!records.length">
+        <tr>
+          <td colspan="6">No records exists</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</ng-container>
+
+<form
+  *ngIf="currentMode === mode.Add || currentMode === mode.Update"
+  [formGroup]="mainForm"
+  (ngSubmit)="submit()"
+>
+  <div class="form-group mt-2" [class.d-none]="currentMode === mode.Add">
+    <label>AppointmentId (REQUIRED)</label>
+    <input class="form-control" readonly formControlName="appointmentId" />
+  </div>
+  <div class="form-group mt-2">
+    <label>Select Doctor (REQUIRED)</label>
+    <ng-select
+      [items]="doctors"
+      bindLabel="name"
+      bindValue="doctorId"
+      formControlName="doctorId"
+      class="p-0"
+    >
+    </ng-select>
+  </div>
+  <div class="form-group mt-2">
+    <label>Select Patient (REQUIRED)</label>
+    <ng-select
+      [items]="patients"
+      bindLabel="name"
+      bindValue="patientId"
+      formControlName="patientId"
+      class="p-0"
+    >
+    </ng-select>
+  </div>
+  <div class="form-group mt-2">
+    <label>Appointment Date (REQUIRED)</label>
+    <input
+      class="form-control"
+      type="date"
+      formControlName="appointmentDate"
+      placeholder="Enter appointment date"
+    />
+  </div>
+  <div class="form-group mt-2">
+    <label>Appointment Time (REQUIRED)</label>
+    <input
+      class="form-control"
+      type="time"
+      formControlName="appointmentTime"
+      placeholder="Enter appointment time"
+    />
+  </div>
+  <div class="form-group mt-2">
+    <label>Notes (REQUIRED)</label>
+    <input
+      class="form-control"
+      type="text"
+      formControlName="notes"
+      placeholder="Enter notes"
+    />
+  </div>
+  <div class="mt-3">
+    <button type="submit" class="btn btn-sm btn-primary me-2">
+      Submit
+    </button>
+    <button
+      type="button"
+      (click)="changeMode(mode.Read)"
+      class="btn btn-sm btn-danger me-2"
+    >
+      Close
+    </button>
+  </div>
+</form>
